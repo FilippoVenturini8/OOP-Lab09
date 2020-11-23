@@ -1,7 +1,9 @@
 package it.unibo.oop.lab.lambda.ex01;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -85,16 +87,14 @@ public final class LambdaUtilities {
         /*
          * Suggestion: consider Map.merge
          */
-        Map<R, T> tmpMap = new HashMap<>();
-        list.forEach(t -> {
-            tmpMap.put(op.apply(t), t);
-        });
-
         Map<R, Set<T>> returnMap = new HashMap<>();
-       /* tmpMap.forEach((k, v) -> {
-            returnMap.merge(k, null, op);
-        });*/
-        return null;
+        list.forEach(t -> {
+            returnMap.merge(op.apply(t), new HashSet<>(Arrays.asList(t)), (t1, t2) -> {
+                t1.addAll(t2);
+                return t1;
+            });
+        });
+        return returnMap;
     }
 
     /**
